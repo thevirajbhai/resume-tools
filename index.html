@@ -4,25 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Resume Builder</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
     body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
     h1 { color: #2d2d2d; }
+    form { max-width: 400px; margin: auto; text-align: left; }
+    label { display: block; margin-top: 15px; font-weight: bold; }
+    input, textarea {
+      width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;
+    }
     button {
-      padding: 12px 20px;
-      margin-top: 20px;
-      background: #007bff;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-      font-size: 16px;
+      margin-top: 20px; padding: 12px 20px; background: #007bff; border: none;
+      border-radius: 8px; color: white; cursor: pointer; font-size: 16px;
     }
     button:hover { background: #0056b3; }
   </style>
 </head>
 <body>
   <h1>Free Resume Builder</h1>
-  <p>Create your professional resume in minutes.</p>
-  <button onclick="alert('Resume Builder Coming Soon!')">Start Now</button>
+  <form id="resumeForm">
+    <label>Full Name</label>
+    <input type="text" id="name" required>
+
+    <label>Email</label>
+    <input type="email" id="email" required>
+
+    <label>Phone</label>
+    <input type="text" id="phone" required>
+
+    <label>Education</label>
+    <textarea id="education" required></textarea>
+
+    <label>Experience</label>
+    <textarea id="experience"></textarea>
+
+    <label>Skills</label>
+    <textarea id="skills"></textarea>
+
+    <button type="submit">Download Resume PDF</button>
+  </form>
+
+  <script>
+    document.getElementById("resumeForm").addEventListener("submit", function(e){
+      e.preventDefault();
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(16);
+      doc.text("Resume", 20, 20);
+
+      doc.setFontSize(12);
+      doc.text("Name: " + document.getElementById("name").value, 20, 40);
+      doc.text("Email: " + document.getElementById("email").value, 20, 50);
+      doc.text("Phone: " + document.getElementById("phone").value, 20, 60);
+      doc.text("Education: " + document.getElementById("education").value, 20, 80);
+      doc.text("Experience: " + document.getElementById("experience").value, 20, 100);
+      doc.text("Skills: " + document.getElementById("skills").value, 20, 120);
+
+      doc.save("resume.pdf");
+    });
+  </script>
 </body>
 </html>
