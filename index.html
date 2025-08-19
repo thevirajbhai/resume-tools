@@ -1,116 +1,200 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Resume Builder</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: auto;
-      padding: 20px;
-      line-height: 1.6;
-    }
-    h1, h2 {
-      text-align: center;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    label {
-      font-weight: bold;
-    }
-    input, textarea {
-      padding: 8px;
-      font-size: 14px;
-      width: 100%;
-      box-sizing: border-box;
-    }
-    button {
-      padding: 10px;
-      background: #0073e6;
-      color: white;
-      border: none;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    button:hover {
-      background: #005bb5;
-    }
-    ul {
-      list-style: none;
-      padding: 0;
-      text-align: center;
-    }
-    ul li {
-      margin: 8px 0;
-    }
-    ul li a {
-      text-decoration: none;
-      color: #0073e6;
-      font-weight: bold;
-    }
-    ul li a:hover {
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Full Resume Builder</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f9;
+  margin: 0;
+  padding: 20px;
+}
+h1 { text-align: center; margin-bottom: 20px; }
+.resume-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+.resume-form {
+  flex: 1;
+  min-width: 300px;
+  background: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+.resume-form label { display: block; margin-top: 10px; font-weight: bold; }
+.resume-form input, .resume-form textarea, .resume-form select { width: 100%; padding: 8px; margin-top:5px; border:1px solid #ddd; border-radius:5px; }
+
+.resume-preview { flex: 1; min-width: 350px; display:flex; flex-direction:column; align-items:center; }
+#preview {
+  width:100%; max-width:700px; background:#fff; padding:20px; border-radius:10px;
+  box-shadow:0 4px 8px rgba(0,0,0,0.1); display:flex; flex-direction:row; gap:20px;
+}
+.left, .right { padding:10px; }
+.left { width:35%; border-radius:10px; background:#f0f4f8; }
+.right { width:65%; }
+#profile-pic { width:100px; height:100px; border-radius:50%; object-fit:cover; margin-bottom:10px; }
+#preview h2 { margin:0; font-size:22px; }
+#preview h3 { margin:15px 0 5px; font-size:16px; border-bottom:1px solid #ddd; padding-bottom:3px; }
+#preview p, #preview a { margin:5px 0; font-size:14px; color: #000; text-decoration:none; }
+#downloadBtn { margin-top:10px; padding:10px 15px; background:green; color:#fff; border:none; border-radius:5px; cursor:pointer; font-size:16px; }
+#downloadBtn:hover { background:darkgreen; }
+
+@media (max-width:768px) {
+  #preview { flex-direction:column; }
+  .left, .right { width:100%; }
+}
+</style>
 </head>
 <body>
-  <h1>Simple Resume Builder</h1>
-  <form id="resumeForm">
-    <label for="name">Full Name:</label>
-    <input type="text" id="name" required>
+<h1>Full Resume Builder</h1>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" required>
+<div class="resume-container">
+  <div class="resume-form">
+    <label>Upload Profile Picture</label>
+    <input type="file" id="photo" accept="image/*">
 
-    <label for="education">Education:</label>
-    <textarea id="education" rows="3" required></textarea>
+    <label>Name</label>
+    <input type="text" id="name">
 
-    <label for="experience">Experience:</label>
-    <textarea id="experience" rows="3"></textarea>
+    <label>Email</label>
+    <input type="email" id="email">
 
-    <label for="skills">Skills:</label>
-    <textarea id="skills" rows="3"></textarea>
+    <label>Phone</label>
+    <input type="text" id="phone">
 
-    <button type="button" onclick="generateResume()">Generate Resume</button>
-  </form>
+    <label>Address</label>
+    <input type="text" id="address">
 
-  <h2 style="margin-top:40px;">Download Sample Resumes</h2>
-  <ul>
-    <li><a href="samples/student-resume.pdf" target="_blank">Student Resume</a></li>
-    <li><a href="samples/developer-resume.pdf" target="_blank">Developer Resume</a></li>
-    <li><a href="samples/designer-resume.pdf" target="_blank">Designer Resume</a></li>
-  </ul>
+    <label>LinkedIn</label>
+    <input type="url" id="linkedin">
 
-  <script>
-    function generateResume() {
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const education = document.getElementById('education').value;
-      const experience = document.getElementById('experience').value;
-      const skills = document.getElementById('skills').value;
+    <label>GitHub</label>
+    <input type="url" id="github">
 
-      const resumeContent = `
-        <h1>${name}</h1>
-        <p><strong>Email:</strong> ${email}</p>
-        <h2>Education</h2>
-        <p>${education}</p>
-        <h2>Experience</h2>
-        <p>${experience}</p>
-        <h2>Skills</h2>
-        <p>${skills}</p>
-      `;
+    <label>Twitter</label>
+    <input type="url" id="twitter">
 
-      const resumeWindow = window.open('', '_blank');
-      resumeWindow.document.write('<html><head><title>My Resume</title></head><body>');
-      resumeWindow.document.write(resumeContent);
-      resumeWindow.document.write('</body></html>');
-      resumeWindow.document.close();
+    <label>Profile</label>
+    <textarea id="profile"></textarea>
+
+    <label>Education</label>
+    <textarea id="education"></textarea>
+
+    <label>Skills</label>
+    <textarea id="skills"></textarea>
+
+    <label>Experience</label>
+    <textarea id="experience"></textarea>
+
+    <label>Certifications</label>
+    <textarea id="certifications"></textarea>
+
+    <label>Projects</label>
+    <textarea id="projects"></textarea>
+
+    <label>Languages</label>
+    <textarea id="languages"></textarea>
+
+    <label>Color Theme</label>
+    <select id="theme">
+      <option value="blue">Blue</option>
+      <option value="green">Green</option>
+      <option value="black">Black</option>
+    </select>
+
+    <label>Or Pick Custom Color</label>
+    <input type="color" id="customColor">
+  </div>
+
+  <div class="resume-preview">
+    <div id="preview">
+      <div class="left">
+        <p><strong>Email:</strong> example@email.com</p>
+        <p><strong>Phone:</strong> 1234567890</p>
+        <p><strong>Address:</strong> Your Address</p>
+        <h3>Skills</h3><p>Details here...</p>
+        <h3>Certifications</h3><p>Details here...</p>
+        <h3>Languages</h3><p>Details here...</p>
+      </div>
+      <div class="right">
+        <img id="profile-pic" src="" alt="">
+        <h2>Your Name</h2>
+        <h3>Profile</h3><p>Details here...</p>
+        <h3>Education</h3><p>Details here...</p>
+        <h3>Experience</h3><p>Details here...</p>
+        <h3>Projects</h3><p>Details here...</p>
+        <h3>Social Links</h3>
+        <p id="socials"></p>
+      </div>
+    </div>
+    <button id="downloadBtn" onclick="downloadPDF()">Download as PDF</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+let uploadedImage = "";
+document.getElementById("photo").addEventListener("change", function(e){
+  const file = e.target.files[0];
+  if(file){
+    const reader = new FileReader();
+    reader.onload = function(evt){
+      uploadedImage = evt.target.result;
+      updatePreview();
     }
-  </script>
+    reader.readAsDataURL(file);
+  }
+});
+
+function updatePreview(){
+  const name = document.getElementById("name").value || "Your Name";
+  const email = document.getElementById("email").value || "example@email.com";
+  const phone = document.getElementById("phone").value || "1234567890";
+  const address = document.getElementById("address").value || "Your Address";
+  const profile = document.getElementById("profile").value || "Details here...";
+  const education = document.getElementById("education").value || "Details here...";
+  const skills = document.getElementById("skills").value || "Details here...";
+  const experience = document.getElementById("experience").value || "Details here...";
+  const certifications = document.getElementById("certifications").value || "Details here...";
+  const projects = document.getElementById("projects").value || "Details here...";
+  const languages = document.getElementById("languages").value || "Details here...";
+  const linkedin = document.getElementById("linkedin").value;
+  const github = document.getElementById("github").value;
+  const twitter = document.getElementById("twitter").value;
+  const theme = document.getElementById("theme").value;
+  const customColor = document.getElementById("customColor").value;
+
+  let color = customColor || (theme==="blue"?"#0073e6":theme==="green"?"#2e8b57":"#000");
+
+  document.getElementById("preview").innerHTML = `
+    <div class="left">
+      <p><strong>Email:</strong> ${email}</p>
+      <p><strong>Phone:</strong> ${phone}</p>
+      <p><strong>Address:</strong> ${address}</p>
+      <h3 style="color:${color}">Skills</h3><p>${skills}</p>
+      <h3 style="color:${color}">Certifications</h3><p>${certifications}</p>
+      <h3 style="color:${color}">Languages</h3><p>${languages}</p>
+    </div>
+    <div class="right">
+      ${uploadedImage?`<img id="profile-pic" src="${uploadedImage}" alt="">`:""}
+      <h2 style="color:${color}">${name}</h2>
+      <h3 style="color:${color}">Profile</h3><p>${profile}</p>
+      <h3 style="color:${color}">Education</h3><p>${education}</p>
+      <h3 style="color:${color}">Experience</h3><p>${experience}</p>
+      <h3 style="color:${color}">Projects</h3><p>${projects}</p>
+      <h3 style="color:${color}">Social Links</h3>
+      <p>${linkedin?`<a href="${linkedin}" target="_blank">LinkedIn</a><br>`:""}${github?`<a href="${github}" target="_blank">GitHub</a><br>`:""}${twitter?`<a href="${twitter}" target="_blank">Twitter</a>`:""}</p>
+    </div>
+  `;
+}
+
+const inputs = ["name","email","phone","address","profile","education","skills","experience","certifications","projects","languages","linkedin","github","twitter","theme","customColor"];
+inputs.forEach(id=>document.getElementById(id).addEventListener("input", updatePreview));
+
+function downloadPDF(){
+  const element = document.getElementById("preview");
+  html2pdf().from(element).save("resume.pdf");
+}
+</script>
 </body>
 </html>
