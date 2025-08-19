@@ -1,25 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Free Resume Builder</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; text-align: center; padding: 40px; }
-    h1 { color: #2d2d2d; }
-    form { max-width: 400px; margin: auto; text-align: left; }
-    label { display: block; margin-top: 15px; font-weight: bold; }
-    input, textarea, select {
-      width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 5px;
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 40px;
     }
+
+    h1 {
+      color: #2d2d2d;
+    }
+
+    form {
+      max-width: 400px;
+      margin: auto;
+      text-align: left;
+    }
+
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
     button {
-      margin-top: 20px; padding: 12px 20px; background: #007bff; border: none;
-      border-radius: 8px; color: white; cursor: pointer; font-size: 16px;
+      margin-top: 20px;
+      padding: 12px 20px;
+      background: #007bff;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
     }
-    button:hover { background: #0056b3; }
+
+    button:hover {
+      background: #0056b3;
+    }
   </style>
 </head>
+
 <body>
   <h1>Free Resume Builder</h1>
   <form id="resumeForm">
@@ -50,9 +86,15 @@
 
     <button type="submit">Download Resume PDF</button>
   </form>
+  <h2 style="margin-top:40px;">Download Sample Resumes</h2>
+  <ul style="list-style:none; padding:0;">
+    <li><a href="samples/student-resume.pdf" target="_blank">Student Resume</a></li>
+    <li><a href="samples/developer-resume.pdf" target="_blank">Developer Resume</a></li>
+    <li><a href="samples/designer-resume.pdf" target="_blank">Designer Resume</a></li>
+  </ul>
 
   <script>
-    document.getElementById("resumeForm").addEventListener("submit", function(e){
+    document.getElementById("resumeForm").addEventListener("submit", function (e) {
       e.preventDefault();
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
@@ -66,22 +108,22 @@
         if (y > 280) { doc.addPage(); y = 20; }
 
         if (template === "classic") {
-          doc.setFontSize(14); doc.setFont("times","bold"); doc.setTextColor(0,0,0);
+          doc.setFontSize(14); doc.setFont("times", "bold"); doc.setTextColor(0, 0, 0);
         } else if (template === "modern") {
-          doc.setTextColor(0, 102, 204); doc.setFontSize(14); doc.setFont("helvetica","bold");
+          doc.setTextColor(0, 102, 204); doc.setFontSize(14); doc.setFont("helvetica", "bold");
         } else { // minimal
-          doc.setTextColor(50,50,50); doc.setFontSize(12); doc.setFont("courier","bold");
+          doc.setTextColor(50, 50, 50); doc.setFontSize(12); doc.setFont("courier", "bold");
         }
 
-        doc.text(title, 20, y); 
+        doc.text(title, 20, y);
         y += 8;
 
-        doc.setFontSize(12); doc.setFont("helvetica","normal"); doc.setTextColor(0,0,0);
+        doc.setFontSize(12); doc.setFont("helvetica", "normal"); doc.setTextColor(0, 0, 0);
         let splitText = doc.splitTextToSize(content, 170);
-        splitText.forEach(line => { 
+        splitText.forEach(line => {
           if (y > 280) { doc.addPage(); y = 20; }
-          doc.text(line, 20, y); 
-          y += 6; 
+          doc.text(line, 20, y);
+          y += 6;
         });
         y += 8;
       }
@@ -89,12 +131,12 @@
       // header
       doc.setFontSize(20);
       if (template === "modern") doc.setTextColor(0, 102, 204);
-      else doc.setTextColor(0,0,0);
+      else doc.setTextColor(0, 0, 0);
       doc.text(document.getElementById("name").value, 20, y);
       y += 10;
-      doc.setFontSize(12); doc.setTextColor(0,0,0);
-      doc.text("Email: " + document.getElementById("email").value, 20, y); y+=7;
-      doc.text("Phone: " + document.getElementById("phone").value, 20, y); y+=10;
+      doc.setFontSize(12); doc.setTextColor(0, 0, 0);
+      doc.text("Email: " + document.getElementById("email").value, 20, y); y += 7;
+      doc.text("Phone: " + document.getElementById("phone").value, 20, y); y += 10;
 
       doc.line(20, y, 190, y); y += 10;
 
@@ -106,4 +148,5 @@
     });
   </script>
 </body>
+
 </html>
