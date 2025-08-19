@@ -1,153 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Free Resume Builder</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <title>Resume Builder</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      text-align: center;
-      padding: 40px;
-    }
-
-    h1 {
-      color: #2d2d2d;
-    }
-
-    form {
-      max-width: 400px;
+      max-width: 800px;
       margin: auto;
-      text-align: left;
+      padding: 20px;
+      line-height: 1.6;
     }
-
+    h1, h2 {
+      text-align: center;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
     label {
-      display: block;
-      margin-top: 15px;
       font-weight: bold;
     }
-
-    input,
-    textarea,
-    select {
-      width: 100%;
+    input, textarea {
       padding: 8px;
-      margin-top: 5px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
     }
-
     button {
-      margin-top: 20px;
-      padding: 12px 20px;
-      background: #007bff;
-      border: none;
-      border-radius: 8px;
+      padding: 10px;
+      background: #0073e6;
       color: white;
+      border: none;
       cursor: pointer;
-      font-size: 16px;
+      margin-top: 10px;
     }
-
     button:hover {
-      background: #0056b3;
+      background: #005bb5;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+      text-align: center;
+    }
+    ul li {
+      margin: 8px 0;
+    }
+    ul li a {
+      text-decoration: none;
+      color: #0073e6;
+      font-weight: bold;
+    }
+    ul li a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
-
 <body>
-  <h1>Free Resume Builder</h1>
+  <h1>Simple Resume Builder</h1>
   <form id="resumeForm">
-    <label>Full Name</label>
+    <label for="name">Full Name:</label>
     <input type="text" id="name" required>
 
-    <label>Email</label>
+    <label for="email">Email:</label>
     <input type="email" id="email" required>
 
-    <label>Phone</label>
-    <input type="text" id="phone" required>
+    <label for="education">Education:</label>
+    <textarea id="education" rows="3" required></textarea>
 
-    <label>Education</label>
-    <textarea id="education" required></textarea>
+    <label for="experience">Experience:</label>
+    <textarea id="experience" rows="3"></textarea>
 
-    <label>Experience</label>
-    <textarea id="experience"></textarea>
+    <label for="skills">Skills:</label>
+    <textarea id="skills" rows="3"></textarea>
 
-    <label>Skills</label>
-    <textarea id="skills"></textarea>
-
-    <label>Choose Template</label>
-    <select id="template">
-      <option value="classic">Classic</option>
-      <option value="modern">Modern</option>
-      <option value="minimal">Minimal</option>
-    </select>
-
-    <button type="submit">Download Resume PDF</button>
+    <button type="button" onclick="generateResume()">Generate Resume</button>
   </form>
-  
+
   <h2 style="margin-top:40px;">Download Sample Resumes</h2>
-  <ul style="list-style:none; padding:0;">
+  <ul>
     <li><a href="samples/student-resume.pdf" target="_blank">Student Resume</a></li>
     <li><a href="samples/developer-resume.pdf" target="_blank">Developer Resume</a></li>
     <li><a href="samples/designer-resume.pdf" target="_blank">Designer Resume</a></li>
   </ul>
 
   <script>
-    document.getElementById("resumeForm").addEventListener("submit", function (e) {
-      e.preventDefault();
-      const { jsPDF } = window.jspdf;
-      const doc = new jsPDF();
+    function generateResume() {
+      const name = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const education = document.getElementById('education').value;
+      const experience = document.getElementById('experience').value;
+      const skills = document.getElementById('skills').value;
 
-      const template = document.getElementById("template").value;
-      let y = 20;
+      const resumeContent = `
+        <h1>${name}</h1>
+        <p><strong>Email:</strong> ${email}</p>
+        <h2>Education</h2>
+        <p>${education}</p>
+        <h2>Experience</h2>
+        <p>${experience}</p>
+        <h2>Skills</h2>
+        <p>${skills}</p>
+      `;
 
-      function addSection(title, content) {
-        if (!content.trim()) return;
-
-        if (y > 280) { doc.addPage(); y = 20; }
-
-        if (template === "classic") {
-          doc.setFontSize(14); doc.setFont("times", "bold"); doc.setTextColor(0, 0, 0);
-        } else if (template === "modern") {
-          doc.setTextColor(0, 102, 204); doc.setFontSize(14); doc.setFont("helvetica", "bold");
-        } else { // minimal
-          doc.setTextColor(50, 50, 50); doc.setFontSize(12); doc.setFont("courier", "bold");
-        }
-
-        doc.text(title, 20, y);
-        y += 8;
-
-        doc.setFontSize(12); doc.setFont("helvetica", "normal"); doc.setTextColor(0, 0, 0);
-        let splitText = doc.splitTextToSize(content, 170);
-        splitText.forEach(line => {
-          if (y > 280) { doc.addPage(); y = 20; }
-          doc.text(line, 20, y);
-          y += 6;
-        });
-        y += 8;
-      }
-
-      // header
-      doc.setFontSize(20);
-      if (template === "modern") doc.setTextColor(0, 102, 204);
-      else doc.setTextColor(0, 0, 0);
-      doc.text(document.getElementById("name").value, 20, y);
-      y += 10;
-      doc.setFontSize(12); doc.setTextColor(0, 0, 0);
-      doc.text("Email: " + document.getElementById("email").value, 20, y); y += 7;
-      doc.text("Phone: " + document.getElementById("phone").value, 20, y); y += 10;
-
-      doc.line(20, y, 190, y); y += 10;
-
-      addSection("Education", document.getElementById("education").value);
-      addSection("Experience", document.getElementById("experience").value);
-      addSection("Skills", document.getElementById("skills").value);
-
-      doc.save("resume.pdf");
-    });
+      const resumeWindow = window.open('', '_blank');
+      resumeWindow.document.write('<html><head><title>My Resume</title></head><body>');
+      resumeWindow.document.write(resumeContent);
+      resumeWindow.document.write('</body></html>');
+      resumeWindow.document.close();
+    }
   </script>
 </body>
-
 </html>
