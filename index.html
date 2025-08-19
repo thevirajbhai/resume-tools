@@ -50,16 +50,36 @@
       const { jsPDF } = window.jspdf;
       const doc = new jsPDF();
 
-      doc.setFontSize(16);
-      doc.text("Resume", 20, 20);
+      // Name at top
+      doc.setFontSize(22);
+      doc.text(document.getElementById("name").value, 20, 20);
 
       doc.setFontSize(12);
-      doc.text("Name: " + document.getElementById("name").value, 20, 40);
-      doc.text("Email: " + document.getElementById("email").value, 20, 50);
-      doc.text("Phone: " + document.getElementById("phone").value, 20, 60);
-      doc.text("Education: " + document.getElementById("education").value, 20, 80);
-      doc.text("Experience: " + document.getElementById("experience").value, 20, 100);
-      doc.text("Skills: " + document.getElementById("skills").value, 20, 120);
+      doc.text("Email: " + document.getElementById("email").value, 20, 30);
+      doc.text("Phone: " + document.getElementById("phone").value, 20, 38);
+
+      // Divider
+      doc.line(20, 45, 190, 45);
+
+      // Sections
+      let y = 60;
+      function addSection(title, content) {
+        if (content.trim() !== "") {
+          doc.setFontSize(14);
+          doc.setFont(undefined, "bold");
+          doc.text(title, 20, y);
+          y += 8;
+          doc.setFontSize(12);
+          doc.setFont(undefined, "normal");
+          let splitText = doc.splitTextToSize(content, 170);
+          doc.text(splitText, 20, y);
+          y += splitText.length * 6 + 10;
+        }
+      }
+
+      addSection("Education", document.getElementById("education").value);
+      addSection("Experience", document.getElementById("experience").value);
+      addSection("Skills", document.getElementById("skills").value);
 
       doc.save("resume.pdf");
     });
